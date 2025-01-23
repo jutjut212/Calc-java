@@ -1,0 +1,506 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
+
+public class App {
+   public App() {
+   }
+
+   public static double feedRate(double var0, double var2, int var4) {
+      return var0 * var2 * (double)var4;
+   }
+
+   public static double sfm(double var0, double var2) {
+      return Math.PI * var0 * var2 / 12.0;
+   }
+
+   public static double chipLoad(double var0, double var2, int var4) {
+      return var0 / (var2 * (double)var4);
+   }
+
+   public static double tapDrillSize(double var0, double var2) {
+      return var0 - 1.0 / var2;
+   }
+
+   public static double measurementOverWires(double var0, double var2, double var4) {
+      return var0 + 3.0 * var4 - 0.866 * var2;
+   }
+
+   public static double threadDepth(double var0, double var2) {
+      return 0.61343 * var2;
+   }
+
+   public static double cuttingSpeed(double var0, double var2) {
+      return Math.PI * var0 * var2 / 1000.0;
+   }
+
+   public static double machiningTime(double var0, double var2) {
+      return var0 / var2;
+   }
+
+   public static double materialRemovalRate(double var0, double var2, double var4) {
+      return var0 * var2 * var4;
+   }
+
+   public static double powerConsumption(double var0, double var2) {
+      return var0 * var2 / 60.0;
+   }
+
+   public static double surfaceRoughness(double var0, double var2) {
+      return var0 * var0 / (8.0 * var2);
+   }
+
+   public static double truePosition(double var0, double var2) {
+      return Math.sqrt(var0 * var0 + var2 * var2);
+   }
+
+   public static double[] uncThreadData(double var0, double var2) {
+      double var4 = 1.0 / var2;
+      double var8 = var0 - 1.08253 * var4;
+      double var10 = var0 - 0.64952 * var4;
+      return new double[]{var0, var8, var10};
+   }
+
+   public static double[] metricThreadData(double var0, double var2) {
+      double var6 = var0 - 1.22687 * var2;
+      double var8 = var0 - 0.64952 * var2;
+      return new double[]{var0, var6, var8};
+   }
+
+   public static double[] acmeThreadData(double var0, double var2) {
+      double var6 = var0 - 1.3 * var2;
+      double var8 = var0 - 0.5 * var2;
+      return new double[]{var0, var6, var8};
+   }
+
+   public static double[] buttressThreadData(double var0, double var2) {
+      double var6 = var0 - 0.6 * var2;
+      double var8 = var0 - 0.3 * var2;
+      return new double[]{var0, var6, var8};
+   }
+
+   public static double add(double var0, double var2) {
+      return var0 + var2;
+   }
+
+   public static double subtract(double var0, double var2) {
+      return var0 - var2;
+   }
+
+   public static double multiply(double var0, double var2) {
+      return var0 * var2;
+   }
+
+   public static String divide(double var0, double var2) {
+      return var2 != 0.0 ? String.valueOf(var0 / var2) : "Error: Division by zero";
+   }
+
+   public static double convertUnits(double var0, String var2, String var3) {
+      HashMap var4 = new HashMap();
+      var4.put("mm_in", var0 / 25.4);
+      var4.put("in_mm", var0 * 25.4);
+      var4.put("mm_cm", var0 / 10.0);
+      var4.put("cm_mm", var0 * 10.0);
+      var4.put("in_ft", var0 / 12.0);
+      var4.put("ft_in", var0 * 12.0);
+      return (Double)var4.getOrDefault(var2 + "_" + var3, var0);
+   }
+
+   public static double knurling(double var0, double var2) {
+      return var0 / var2;
+   }
+
+   public static List<Double> gaugeBlockStack(double var0, List<Double> var2) {
+      ArrayList var3 = new ArrayList();
+      double var4 = var0;
+      Collections.sort(var2, Collections.reverseOrder());
+      Iterator var6 = var2.iterator();
+
+      while(var6.hasNext()) {
+         double var7 = (Double)var6.next();
+         if (var7 <= var4) {
+            var3.add(var7);
+            var4 -= var7;
+         }
+      }
+
+      return var3;
+   }
+
+   public static double taperLargeDiameter(double var0, double var2, double var4) {
+      return var0 + var4 * var2;
+   }
+
+   public static List<double[]> boltCircle(double var0, int var2, double var3) {
+      ArrayList var5 = new ArrayList();
+      double var6 = 360.0 / (double)var2;
+
+      for(int var8 = 0; var8 < var2; ++var8) {
+         double var9 = Math.toRadians(var3 + (double)var8 * var6);
+         double var11 = var0 / 2.0 * Math.cos(var9);
+         double var13 = var0 / 2.0 * Math.sin(var9);
+         var5.add(new double[]{var11, var13});
+      }
+
+      return var5;
+   }
+
+   public static String threadMillGcode(double var0, double var2, double var4, double var6, double var8) {
+      StringBuilder var10 = new StringBuilder();
+      var10.append("G90 G54 G17 G21\n");
+      var10.append("S").append((int)var6).append(" M3\n");
+      var10.append("G0 X0 Y0 Z5\n");
+      var10.append("G1 Z-").append(var4).append(" F").append((int)var8).append("\n");
+      var10.append("G2 I").append(var0 / 2.0).append(" P").append(var2).append(" F").append((int)var8).append("\n");
+      var10.append("G0 Z5\n");
+      var10.append("M30\n");
+      return var10.toString();
+   }
+
+   public static void main(String[] var0) {
+      try {
+         Scanner var1 = new Scanner(System.in);
+
+         label190: {
+            try {
+               boolean var2 = true;
+
+               label186:
+               while(true) {
+                  label184:
+                  while(var2) {
+                     System.out.println("\nMachinist Calculator");
+                     System.out.println("1. Feed Rate");
+                     System.out.println("2. SFM");
+                     System.out.println("3. Chip Load");
+                     System.out.println("4. Tap Drill Size");
+                     System.out.println("5. Measurement Over Wires");
+                     System.out.println("6. Thread Depth");
+                     System.out.println("7. Cutting Speed");
+                     System.out.println("8. Machining Time");
+                     System.out.println("9. Material Removal Rate");
+                     System.out.println("10. Power Consumption");
+                     System.out.println("11. Surface Roughness");
+                     System.out.println("12. True Position");
+                     System.out.println("13. UNC Thread Data");
+                     System.out.println("14. Metric Thread Data");
+                     System.out.println("15. Acme Thread Data");
+                     System.out.println("16. Buttress Thread Data");
+                     System.out.println("17. Basic Math Operations");
+                     System.out.println("18. Unit Conversion");
+                     System.out.println("19. Knurling");
+                     System.out.println("20. Gauge Block Stack");
+                     System.out.println("21. Taper Large Diameter");
+                     System.out.println("22. Bolt Circle");
+                     System.out.println("23. Thread Mill G-Code");
+                     System.out.println("0. Exit");
+                     System.out.print("Select an option: ");
+                     double var6;
+                     int var10;
+                     double var13;
+                     double var17;
+                     double var27;
+                     double var29;
+                     double var67;
+                     switch (var1.nextLine()) {
+                        case "0":
+                           break label186;
+                        case "1":
+                           System.out.print("Enter RPM: ");
+                           var6 = var1.nextDouble();
+                           System.out.print("Enter Chip Load (in/tooth): ");
+                           double var8 = var1.nextDouble();
+                           System.out.print("Enter Number of Teeth: ");
+                           var10 = var1.nextInt();
+                           double var11 = feedRate(var6, var8, var10);
+                           System.out.println("Feed Rate: " + var11 + " in/min");
+                           break;
+                        case "2":
+                           System.out.print("Enter Diameter (in): ");
+                           var13 = var1.nextDouble();
+                           System.out.print("Enter RPM: ");
+                           var6 = var1.nextDouble();
+                           double var15 = sfm(var13, var6);
+                           System.out.println("SFM: " + var15 + " ft/min");
+                           break;
+                        case "3":
+                           System.out.print("Enter Feed Rate (in/min): ");
+                           var17 = var1.nextDouble();
+                           System.out.print("Enter RPM: ");
+                           var6 = var1.nextDouble();
+                           System.out.print("Enter Number of Teeth: ");
+                           var10 = var1.nextInt();
+                           double var19 = chipLoad(var17, var6, var10);
+                           System.out.println("Chip Load: " + var19 + " in/tooth");
+                           break;
+                        case "4":
+                           System.out.print("Enter Thread Size (in): ");
+                           double var21 = var1.nextDouble();
+                           System.out.print("Enter Thread Pitch (threads/in): ");
+                           double var23 = var1.nextDouble();
+                           double var25 = tapDrillSize(var21, var23);
+                           System.out.println("Tap Drill Size: " + var25 + " in");
+                           break;
+                        case "5":
+                           System.out.print("Enter Thread Diameter (in): ");
+                           var27 = var1.nextDouble();
+                           System.out.print("Enter Pitch (threads/in): ");
+                           var29 = var1.nextDouble();
+                           System.out.print("Enter Wire Diameter (in): ");
+                           double var31 = var1.nextDouble();
+                           double var33 = measurementOverWires(var27, var29, var31);
+                           System.out.println("Measurement Over Wires: " + var33 + " in");
+                           break;
+                        case "6":
+                           System.out.print("Enter Thread Diameter (in): ");
+                           var27 = var1.nextDouble();
+                           System.out.print("Enter Pitch (threads/in): ");
+                           var29 = var1.nextDouble();
+                           double var35 = threadDepth(var27, var29);
+                           System.out.println("Thread Depth: " + var35 + " in");
+                           break;
+                        case "7":
+                           System.out.print("Enter Diameter (mm): ");
+                           var13 = var1.nextDouble();
+                           System.out.print("Enter RPM: ");
+                           var6 = var1.nextDouble();
+                           double var37 = cuttingSpeed(var13, var6);
+                           System.out.println("Cutting Speed: " + var37 + " m/min");
+                           break;
+                        case "8":
+                           System.out.print("Enter Length of Cut (mm): ");
+                           double var39 = var1.nextDouble();
+                           System.out.print("Enter Feed Rate (mm/min): ");
+                           var17 = var1.nextDouble();
+                           double var41 = machiningTime(var39, var17);
+                           System.out.println("Machining Time: " + var41 + " min");
+                           break;
+                        case "9":
+                           System.out.print("Enter Width of Cut (mm): ");
+                           double var43 = var1.nextDouble();
+                           System.out.print("Enter Depth of Cut (mm): ");
+                           double var45 = var1.nextDouble();
+                           System.out.print("Enter Feed Rate (mm/min): ");
+                           var17 = var1.nextDouble();
+                           double var47 = materialRemovalRate(var43, var45, var17);
+                           System.out.println("Material Removal Rate: " + var47 + " in^3/min");
+                           break;
+                        case "10":
+                           System.out.print("Enter Cutting Force (N): ");
+                           double var49 = var1.nextDouble();
+                           System.out.print("Enter Cutting Speed (m/min): ");
+                           double var51 = var1.nextDouble();
+                           double var53 = powerConsumption(var49, var51);
+                           System.out.println("Power Consumption: " + var53 + " kW");
+                           break;
+                        case "11":
+                           System.out.print("Enter Feed Per Tooth (mm): ");
+                           double var55 = var1.nextDouble();
+                           System.out.print("Enter Nose Radius (mm): ");
+                           double var57 = var1.nextDouble();
+                           double var59 = surfaceRoughness(var55, var57);
+                           System.out.println("Surface Roughness: " + var59 + " \u00b5m");
+                           break;
+                        case "12":
+                           System.out.print("Enter X Deviation (mm): ");
+                           double var61 = var1.nextDouble();
+                           System.out.print("Enter Y Deviation (mm): ");
+                           double var63 = var1.nextDouble();
+                           double var65 = truePosition(var61, var63);
+                           System.out.println("True Position: " + var65 + " mm");
+                           break;
+                        case "13":
+                           System.out.print("Enter Diameter (in): ");
+                           var13 = var1.nextDouble();
+                           System.out.print("Enter Threads Per Inch (TPI): ");
+                           var67 = var1.nextDouble();
+                           double[] var69 = uncThreadData(var13, var67);
+                           System.out.println("UNC Thread Data:");
+                           System.out.println("Major Diameter: " + var69[0] + " in");
+                           System.out.println("Minor Diameter: " + var69[1] + " in");
+                           System.out.println("Pitch Diameter: " + var69[2] + " in");
+                           break;
+                        case "14":
+                           System.out.print("Enter Diameter (mm): ");
+                           var13 = var1.nextDouble();
+                           System.out.print("Enter Pitch (mm): ");
+                           var29 = var1.nextDouble();
+                           double[] var70 = metricThreadData(var13, var29);
+                           System.out.println("Metric Thread Data:");
+                           System.out.println("Major Diameter: " + var70[0] + " mm");
+                           System.out.println("Minor Diameter: " + var70[1] + " mm");
+                           System.out.println("Pitch Diameter: " + var70[2] + " mm");
+                           break;
+                        case "15":
+                           System.out.print("Enter Diameter (in): ");
+                           var13 = var1.nextDouble();
+                           System.out.print("Enter Pitch (in): ");
+                           var29 = var1.nextDouble();
+                           double[] var71 = acmeThreadData(var13, var29);
+                           System.out.println("Acme Thread Data:");
+                           System.out.println("Major Diameter: " + var71[0] + " in");
+                           System.out.println("Minor Diameter: " + var71[1] + " in");
+                           System.out.println("Pitch Diameter: " + var71[2] + " in");
+                           break;
+                        case "16":
+                           System.out.print("Enter Diameter (in): ");
+                           var13 = var1.nextDouble();
+                           System.out.print("Enter Pitch (in): ");
+                           var29 = var1.nextDouble();
+                           double[] var72 = buttressThreadData(var13, var29);
+                           System.out.println("Buttress Thread Data:");
+                           System.out.println("Major Diameter: " + var72[0] + " in");
+                           System.out.println("Minor Diameter: " + var72[1] + " in");
+                           System.out.println("Pitch Diameter: " + var72[2] + " in");
+                           break;
+                        case "17":
+                           System.out.println("Basic Math Operations");
+                           System.out.println("a. Addition");
+                           System.out.println("b. Subtraction");
+                           System.out.println("c. Multiplication");
+                           System.out.println("d. Division");
+                           System.out.print("Select an operation: ");
+                           String var73 = var1.next();
+                           System.out.print("Enter first number: ");
+                           double var74 = var1.nextDouble();
+                           System.out.print("Enter second number: ");
+                           double var76 = var1.nextDouble();
+                           PrintStream var10000;
+                           double var114;
+                           switch (var73) {
+                              case "a":
+                                 var10000 = System.out;
+                                 var114 = add(var74, var76);
+                                 var10000.println("Result: " + var114);
+                                 continue;
+                              case "b":
+                                 var10000 = System.out;
+                                 var114 = subtract(var74, var76);
+                                 var10000.println("Result: " + var114);
+                                 continue;
+                              case "c":
+                                 var10000 = System.out;
+                                 var114 = multiply(var74, var76);
+                                 var10000.println("Result: " + var114);
+                                 continue;
+                              case "d":
+                                 var10000 = System.out;
+                                 String var10001 = divide(var74, var76);
+                                 var10000.println("Result: " + var10001);
+                                 continue;
+                              default:
+                                 System.out.println("Invalid choice");
+                                 continue;
+                           }
+                        case "18":
+                           System.out.print("Enter value: ");
+                           double var78 = var1.nextDouble();
+                           System.out.print("Enter from unit (mm, in, cm, ft): ");
+                           String var80 = var1.next();
+                           System.out.print("Enter to unit (mm, in, cm, ft): ");
+                           String var81 = var1.next();
+                           double var82 = convertUnits(var78, var80, var81);
+                           System.out.println("Converted Value: " + var82);
+                           break;
+                        case "19":
+                           System.out.print("Enter Diameter (in): ");
+                           var13 = var1.nextDouble();
+                           System.out.print("Enter Threads Per Inch (TPI): ");
+                           var67 = var1.nextDouble();
+                           double var84 = knurling(var13, var67);
+                           System.out.println("Knurling: " + var84 + " in");
+                           break;
+                        case "20":
+                           System.out.print("Enter Target Height (mm): ");
+                           double var86 = var1.nextDouble();
+                           System.out.print("Enter Available Blocks (comma separated, mm): ");
+                           var1.nextLine();
+                           ArrayList var88 = new ArrayList();
+                           String[] var89 = var1.nextLine().split(",");
+                           int var111 = var89.length;
+
+                           for(int var91 = 0; var91 < var111; ++var91) {
+                              String var112 = var89[var91];
+                              var88.add(Double.parseDouble(var112.trim()));
+                           }
+
+                           List var110 = gaugeBlockStack(var86, var88);
+                           System.out.println("Gauge Block Stack: " + String.valueOf(var110));
+                           break;
+                        case "21":
+                           System.out.print("Enter Small Diameter (in): ");
+                           double var90 = var1.nextDouble();
+                           System.out.print("Enter Length (in): ");
+                           double var92 = var1.nextDouble();
+                           System.out.print("Enter Taper Per Inch: ");
+                           double var94 = var1.nextDouble();
+                           double var96 = taperLargeDiameter(var90, var92, var94);
+                           System.out.println("Large Diameter: " + var96 + " in");
+                           break;
+                        case "22":
+                           System.out.print("Enter Diameter (in): ");
+                           var13 = var1.nextDouble();
+                           System.out.print("Enter Number of Holes: ");
+                           int var98 = var1.nextInt();
+                           System.out.print("Enter Start Angle (degrees): ");
+                           double var99 = var1.nextDouble();
+                           List var101 = boltCircle(var13, var98, var99);
+                           System.out.println("Bolt Circle Coordinates: ");
+                           Iterator var113 = var101.iterator();
+
+                           while(true) {
+                              if (!var113.hasNext()) {
+                                 continue label184;
+                              }
+
+                              double[] var103 = (double[])var113.next();
+                              System.out.println("X: " + var103[0] + ", Y: " + var103[1]);
+                           }
+                        case "23":
+                           System.out.print("Enter Diameter (in): ");
+                           var13 = var1.nextDouble();
+                           System.out.print("Enter Pitch (in): ");
+                           var29 = var1.nextDouble();
+                           System.out.print("Enter Depth (in): ");
+                           double var102 = var1.nextDouble();
+                           System.out.print("Enter RPM: ");
+                           var6 = var1.nextDouble();
+                           System.out.print("Enter Feed Rate (in/min): ");
+                           double var104 = var1.nextDouble();
+                           String var106 = threadMillGcode(var13, var29, var102, var6, var104);
+                           System.out.println("Thread Mill G-Code:\n" + var106);
+                           break;
+                        default:
+                           System.out.println("Invalid choice");
+                     }
+                  }
+
+                  var1.nextLine();
+                  break label190;
+               }
+            } catch (Throwable var108) {
+               try {
+                  var1.close();
+               } catch (Throwable var107) {
+                  var108.addSuppressed(var107);
+               }
+
+               throw var108;
+            }
+
+            var1.close();
+            return;
+         }
+
+         var1.close();
+      } catch (NumberFormatException var109) {
+         var109.printStackTrace();
+      }
+
+   }
+}

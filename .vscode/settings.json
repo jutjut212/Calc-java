@@ -1,0 +1,15 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+
+    "java.debug.settings.onBuildFailureProceed": true,
+    "jdk.java.imports.groups": [
+
+        "java",
+        "javax",
+        "org",
+        "com",
+        ""
+    ],
+    "java.jdt.ls.java.home":"C:\\Users\\quality\\AppData\\Local\\Programs\\Eclipse Adoptium\\jdk-21.0.5.11-hotspot",
+}
